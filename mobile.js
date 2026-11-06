@@ -25,7 +25,7 @@ function resizeMobilePage(){
   }else if(['form','uploaded','videoForm'].includes(S.page)){
     const panel=named('Bottom sheet / Light')[0];if(panel){const top=Math.max(48,H-514),height=H-top;yAt(panel,top);panel.style.height=height+'px';const footer=named('Fixed action area')[0],body=named('Form content')[0];if(footer)yAt(footer,height-100);if(body){body.style.maxHeight=Math.max(100,height-128)+'px';body.style.overflowY='auto';body.style.scrollbarWidth='none';}}
   }else if(S.page==='tools'){
-    moveBottomChildren(root,delta);const scroll=named('Scrollable AI tool catalogue')[0];if(scroll)scroll.style.height=Math.max(250,H-130)+'px';
+    moveBottomChildren(root,delta);layoutToolbox(host,H);
   }else if(S.page==='explore'){
     moveBottomChildren(root,delta);moveBottomChildren(host,delta);const scroll=host.querySelector('.explore-scroll');if(scroll)scroll.style.height=Math.max(160,H-141)+'px';
   }else if(['videoActions','imageActions'].includes(S.page)){

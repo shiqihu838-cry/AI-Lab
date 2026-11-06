@@ -12,9 +12,9 @@ function buildExplore(host){
     content.append(child);child.style.top=(y-44)+'px';
   }
   const title=node('153:5023');title.style.left='59px';title.style.width='190px';
-  const exit=div(content,'explore-exit',11,11,40,40);
-  const close=sourceIcon(exit,'video-prompt',[17,72,43,43],3,3,34,34);close.style.borderRadius='50%';
-  click(exit,()=>{S.history=[];S.trendsScroll=0;go(S.home||'home',false);},'退出 AI Trends');
+  const exit=div(content,'explore-exit',11,15,40,40);
+  icon(exit,'icon/back',10,10,20);
+  click(exit,()=>{S.history=[];S.trendsScroll=0;go(S.home||'home',false);},'返回 AI Lab');
 
   const hero=node('153:5024');
   let start=null,dragged=false,heroIndex=1;
