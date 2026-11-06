@@ -5,13 +5,13 @@ function commonStatusBar(host){
   host.querySelectorAll('[data-name="iPhone X (or newer)"]').forEach(e=>e.remove());
   host.querySelectorAll('.unified-status').forEach(e=>e.remove());
   const bar=div(host,'unified-status',0,0,375,44);bar.dataset.statusStyle='light-941';bar.setAttribute('aria-label','9:41，信号、Wi-Fi 和电量');
-  bar.style.zIndex='180';bar.style.pointerEvents='none';bar.style.background=S.page==='tools'?'#bfeaf5':'#fafbfd';
+  bar.style.zIndex='180';bar.style.pointerEvents='none';bar.style.background='transparent';
   const im=document.createElement('img');im.src=F.svgs['153:5214'];im.alt='';im.draggable=false;im.width=375;im.height=44;bar.append(im);
 }
 function geometry(el){if(!mobileBaseGeometry.has(el)){mobileBaseGeometry.set(el,{x:parseFloat(el.style.left)||0,y:parseFloat(el.style.top)||0,w:parseFloat(el.style.width)||0,h:parseFloat(el.style.height)||0});}return mobileBaseGeometry.get(el);}
 function yAt(el,y){geometry(el);el.style.top=y+'px';}
 function moveBottomChildren(parent,delta,minY=600){for(const e of parent.children){const b=geometry(e);if(b.y>=minY)yAt(e,b.y+delta);}}
-function rootNode(host){return [...host.children].find(e=>e.dataset.id===ids[S.page]||(HOME_STATES.includes(S.page)&&e.dataset.id===ids.home));}
+function rootNode(host){const id=HOME_STATES.includes(S.page)?ids.home:ids[S.page];if(!id)return null;return [...host.children].find(e=>e.dataset.id===id);}
 function resizeMobilePage(){
   const host=phone.querySelector('.screen');if(!host)return;const H=demoViewport.height,delta=H-812;host.style.height=H+'px';
   const root=rootNode(host);if(root){root.style.height=H+'px';for(const e of root.children)if(e.classList.contains('paint'))e.style.height=H+'px';}
