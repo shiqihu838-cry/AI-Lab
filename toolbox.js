@@ -1,4 +1,47 @@
-/* Keep the supplied tool layers and their DARKEN blend; paginate the existing 4 × 2 grid. */
+/* Preserve the supplied icon pixels; remove their white matte before displaying them. */
+const toolboxAlphaIcons=new Map();
+function toolboxAlphaFallback(){
+  if(document.getElementById('toolbox-alpha-definitions'))return;
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.id='toolbox-alpha-definitions';svg.setAttribute('width','0');svg.setAttribute('height','0');svg.setAttribute('aria-hidden','true');
+  svg.style.cssText='position:absolute;pointer-events:none';
+  svg.innerHTML='<defs><filter id="toolbox-white-to-alpha" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -.37778 -.37778 -.37778 0 1"/></filter></defs>';
+  document.body.append(svg);
+}
+function transparentToolIcon(n){
+  const fill=n.fills.find(f=>f.type==='IMAGE'),m=fill.imageTransform;
+  const key=fill.imageHash+JSON.stringify(m);
+  if(!toolboxAlphaIcons.has(key))toolboxAlphaIcons.set(key,(async()=>{
+    const image=new Image();image.src=F.hashes[fill.imageHash];await image.decode();
+    const canvas=document.createElement('canvas');canvas.width=Math.ceil(n.w*3);canvas.height=Math.ceil(n.h*3);
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    ctx.drawImage(image,m[0][2]*image.naturalWidth,m[1][2]*image.naturalHeight,m[0][0]*image.naturalWidth,m[1][1]*image.naturalHeight,0,0,canvas.width,canvas.height);
+    const pixels=ctx.getImageData(0,0,canvas.width,canvas.height);
+    for(let i=0;i<pixels.data.length;i+=4){
+      const gray=(pixels.data[i]+pixels.data[i+1]+pixels.data[i+2])/3;
+      pixels.data[i+3]=Math.round(pixels.data[i+3]*Math.max(0,1-gray/225));
+      pixels.data[i]=pixels.data[i+1]=pixels.data[i+2]=0;
+    }
+    ctx.putImageData(pixels,0,0);return canvas.toDataURL('image/png');
+  })());
+  return toolboxAlphaIcons.get(key);
+}
+function prepareToolboxIcons(host){
+  toolboxAlphaFallback();
+  for(const element of host.querySelectorAll('[data-id],[data-source-id]')){
+    const n=byId.get(element.dataset.id||element.dataset.sourceId);
+    if(n?.blendMode!=='DARKEN'||!n.fills?.some(f=>f.type==='IMAGE'))continue;
+    element.dataset.toolboxIcon='true';element.style.mixBlendMode='normal';
+    // The filter also covers the loading frame and local-file browsers that restrict canvas reads.
+    element.style.filter='url(#toolbox-white-to-alpha)';element.dataset.iconAlpha='fallback';
+    transparentToolIcon(n).then(src=>{
+      if(!element.isConnected)return;
+      const image=new Image();image.alt='';image.draggable=false;image.src=src;
+      image.style.cssText='display:block;width:100%;height:100%;pointer-events:none';
+      element.replaceChildren(image);element.style.filter='none';element.dataset.iconAlpha='ready';
+    }).catch(()=>{});
+  }
+}
 function buildToolbox(host){
   host.classList.add('toolbox-screen');host.style.touchAction='pan-x pan-y';
   const quick=node('583:7145'),row1=node('583:7146'),row2=node('583:7251');
@@ -28,6 +71,7 @@ function buildToolbox(host){
   pager.scrollLeft=(S.toolsPage||0)*375;sync();
   const fade=node('570:6703');fade.replaceChildren();fade.style.pointerEvents='none';
   fade.style.background='linear-gradient(180deg,rgba(241,244,249,0) 0%,#f1f4f9 60%,#f1f4f9 100%)';
+  prepareToolboxIcons(host);
 }
 function layoutToolbox(host,height){
   const scroll=host.querySelector('[data-id="570:6641"]'),fade=host.querySelector('[data-id="570:6703"]');
