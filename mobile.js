@@ -27,7 +27,7 @@ function resizeMobilePage(){
   }else if(S.page==='tools'){
     moveBottomChildren(root,delta);const scroll=named('Scrollable AI tool catalogue')[0];if(scroll)scroll.style.height=Math.max(250,H-130)+'px';
   }else if(S.page==='explore'){
-    moveBottomChildren(root,delta);moveBottomChildren(host,delta);const gallery=host.querySelector('.gallery-area');if(gallery)gallery.style.height=Math.max(110,H-380)+'px';
+    moveBottomChildren(root,delta);moveBottomChildren(host,delta);const scroll=host.querySelector('.explore-scroll');if(scroll)scroll.style.height=Math.max(160,H-141)+'px';
   }else if(['videoActions','imageActions'].includes(S.page)){
     let region=host.querySelector('.mobile-actions-scroll');if(!region){region=div(host,'mobile-actions-scroll',0,144,375,Math.max(160,H-291));region.style.overflowY='auto';region.style.scrollbarWidth='none';for(const e of [...host.children]){if(e===region)continue;const b=geometry(e);if(b.y>=144&&b.y<673){region.append(e);yAt(e,b.y-144);}}const pad=div(region,'',0,526,1,1);pad.style.pointerEvents='none';}
     region.style.height=Math.max(150,H-291)+'px';for(const e of host.children){if(e===region)continue;const b=geometry(e);if(b.y>=673)yAt(e,b.y+delta);}
