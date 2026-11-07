@@ -23,3 +23,4 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:non
 .capability-video[data-ready=true]{opacity:1}
 .ai-feed-video{position:absolute;left:0;top:44px;width:375px;height:calc(100% - 200px);object-fit:contain;pointer-events:none;background:#000}
 #phone[data-page=aiVideoFeed] .unified-status{filter:invert(1)}
+.embedded-back-clean{mask-image:linear-gradient(to right,transparent,#000 25%,#000 75%,transparent),linear-gradient(to bottom,transparent,#000 25%,#000 75%,transparent);mask-composite:intersect}
