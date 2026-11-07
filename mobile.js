@@ -13,6 +13,7 @@ function yAt(el,y){geometry(el);el.style.top=y+'px';}
 function moveBottomChildren(parent,delta,minY=600){for(const e of parent.children){const b=geometry(e);if(b.y>=minY)yAt(e,b.y+delta);}}
 function rootNode(host){const id=HOME_STATES.includes(S.page)?ids.home:ids[S.page];if(!id)return null;return [...host.children].find(e=>e.dataset.id===id);}
 function resizeMobilePage(){
+  if(S.page==='mode'&&modeMenuState){resizeModeBackground();return;}
   const host=phone.querySelector('.screen');if(!host)return;const H=demoViewport.height,delta=H-812;host.style.height=H+'px';
   const root=rootNode(host);if(root){root.style.height=H+'px';for(const e of root.children)if(e.classList.contains('paint'))e.style.height=H+'px';}
   if(HOME_STATES.includes(S.page)||S.page==='mode'){

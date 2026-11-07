@@ -11,3 +11,5 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:non
 .figma-node[data-id="153:5247"]::after,.figma-node[data-name="Credits"]::after,.figma-node[data-name="history button"]::after{content:"";position:absolute;inset:0;border:1.15px solid #c5cfd9;border-radius:inherit;pointer-events:none;z-index:3}
 
 .trends-hero-viewport{overflow:hidden;isolation:isolate}.history-list{overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}.history-list::-webkit-scrollbar{display:none}.history-heading,.history-title,.history-subtitle,.history-time{pointer-events:none}.history-entry{cursor:pointer}.history-back{z-index:2}
+
+.badge-optical-content{transform:translateX(1.5px)}.cta-optical-label>svg{transform:translateX(1.5px)}.mode-layer{background:transparent;isolation:isolate}
