@@ -17,18 +17,22 @@ function buildExplore(host){
   click(exit,()=>{S.history=[];S.trendsScroll=0;go(S.home||'home',false);},'返回 AI Lab');
 
   const hero=node('153:5024');
+  const heroViewport=div(content,'trends-hero-viewport',19,68.5,356,158);
+  heroViewport.dataset.heroIndex='1';
+  heroViewport.append(hero);hero.style.left='-291.216796875px';hero.style.top='0';hero.style.pointerEvents='none';
   let start=null,dragged=false,heroIndex=1;
-  hero.style.touchAction='pan-y';
-  hero.onpointerdown=e=>{start={x:e.clientX,y:e.clientY};dragged=false;};
-  hero.onpointerup=e=>{
+  heroViewport.style.touchAction='pan-y';
+  heroViewport.onpointerdown=e=>{start={x:e.clientX,y:e.clientY};dragged=false;};
+  heroViewport.onpointerup=e=>{
     if(!start)return;const dx=e.clientX-start.x,dy=e.clientY-start.y;start=null;
     if(Math.abs(dx)>25&&Math.abs(dx)>Math.abs(dy)){
       dragged=true;heroIndex=Math.max(0,Math.min(2,heroIndex+(dx<0?1:-1)));
-      hero.style.transition='left .35s ease';hero.style.left=(19.079345703125-heroIndex*291.296142578125)+'px';
+      heroViewport.dataset.heroIndex=String(heroIndex);
+      hero.style.transition='left .35s ease';hero.style.left=(.079345703125-heroIndex*291.296142578125)+'px';
     }
   };
-  hero.onpointercancel=()=>{start=null;dragged=true;};
-  click(hero,()=>{if(dragged){dragged=false;return;}S.trendsScroll=scroll.scrollTop;S.pickerFrom='videoForm';go('videoForm');},'Try It');
+  heroViewport.onpointercancel=()=>{start=null;dragged=true;};
+  click(heroViewport,()=>{if(dragged){dragged=false;return;}S.trendsScroll=scroll.scrollTop;S.pickerFrom='videoForm';go('videoForm');},'Try It');
 
   const tabs=div(content,'explore-tabs',18,239,250,33);tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label','案例类型');
   const tabButtons=[];
@@ -71,5 +75,5 @@ function buildExplore(host){
   }
   updateFeed();scroll.scrollTop=S.trendsScroll||0;scroll.addEventListener('scroll',()=>{S.trendsScroll=scroll.scrollTop;},{passive:true});
   composerNode.style.zIndex=40;bindInput(host,725);
-  const history=node('558:6057');click(history,()=>S.task?go('assistant'):null,'创作历史');
+  const history=node('558:6057');click(history,()=>go('history'),'创作历史');
 }

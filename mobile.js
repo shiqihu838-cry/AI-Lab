@@ -31,6 +31,8 @@ function resizeMobilePage(){
   }else if(['videoActions','imageActions'].includes(S.page)){
     let region=host.querySelector('.mobile-actions-scroll');if(!region){region=div(host,'mobile-actions-scroll',0,144,375,Math.max(160,H-291));region.style.overflowY='auto';region.style.scrollbarWidth='none';for(const e of [...host.children]){if(e===region)continue;const b=geometry(e);if(b.y>=144&&b.y<673){region.append(e);yAt(e,b.y-144);}}const pad=div(region,'',0,526,1,1);pad.style.pointerEvents='none';}
     region.style.height=Math.max(150,H-291)+'px';for(const e of host.children){if(e===region)continue;const b=geometry(e);if(b.y>=673)yAt(e,b.y+delta);}
+  }else if(S.page==='history'){
+    const list=host.querySelector('.history-list');if(list)list.style.height=Math.max(140,H-106)+'px';
   }else if(['photoPicker','picker'].includes(S.page)){
     const footerY=H-(S.page==='picker'?163:88);for(const e of host.children){const b=geometry(e);if(b.y>=(S.page==='picker'?649:724))yAt(e,b.y+delta);if(b.y===578)yAt(e,b.y+delta);}
     const gallery=host.querySelector('.gallery-area');if(gallery)gallery.style.height=Math.max(130,footerY-114)+'px';
