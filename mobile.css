@@ -21,3 +21,5 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:non
 /* Supplied AI-video clip under the existing Figma caption, clipped by its original card. */
 .capability-video{position:absolute;inset:0;width:242px;height:250px;object-fit:cover;object-position:center;pointer-events:none;opacity:0;display:block}
 .capability-video[data-ready=true]{opacity:1}
+.ai-feed-video{position:absolute;left:0;top:44px;width:375px;height:calc(100% - 200px);object-fit:contain;pointer-events:none;background:#000}
+#phone[data-page=aiVideoFeed] .unified-status{filter:invert(1)}

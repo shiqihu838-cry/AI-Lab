@@ -131,6 +131,6 @@ class HomeCarousel {
   preload(){for(const actor of this.actors.values())for(const im of actor.querySelectorAll('img'))im.decode?.().catch(()=>{});}
 }
 function installHomeCarousel(key,host){const viewport=named('Workspace scroll viewport')[0];if(viewport){viewport.style.overflowY='hidden';viewport.style.overflowX='hidden';viewport.scrollTop=0;}
-  const container=named('Capability carousel / interactive')[0];const open=state=>{if(state==='homeVideo')go('videoActions');else if(state==='homeCut'){S.pickerFrom='photoPicker';go('photoPicker');}else go('imageActions');};
+  const container=named('Capability carousel / interactive')[0];const open=state=>{if(state==='homeVideo'){S.aiFeedIndex=0;go('aiVideoFeed');}else if(state==='homeCut'){S.pickerFrom='photoPicker';go('photoPicker');}else go('imageActions');};
   window.homeCarousel=new HomeCarousel(container,key,open);return window.homeCarousel;
 }
