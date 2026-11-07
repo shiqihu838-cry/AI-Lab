@@ -4,9 +4,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:non
 
 .toolbox-screen .figma-node,.toolbox-screen .paint,.toolbox-screen .crop{backface-visibility:visible!important}.quick-tools-pager{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}.quick-tools-pager::-webkit-scrollbar{display:none}.quick-tools-page{scroll-snap-align:start;scroll-snap-stop:always}.explore-exit{display:flex;align-items:center;justify-content:center}
 
-/* Match the reference's SF UI text without distributing an unrelated font file. */
-@font-face{font-family:"Trends UI Local";src:local("SFProText-Semibold"),local("SF Pro Text Semibold"),local("Helvetica Neue Medium"),local("HelveticaNeue-Medium");font-style:normal;font-weight:500 649;font-display:swap}
-@font-face{font-family:"Trends UI Local";src:local("SFProText-Bold"),local("SF Pro Text Bold"),local("Helvetica Neue Bold"),local("HelveticaNeue-Bold");font-style:normal;font-weight:650 900;font-display:swap}
-.explore-tabs,.explore-tab,.explore-categories .text-node{font-family:-apple-system,BlinkMacSystemFont,"Trends UI Local","SF Pro Text","SF Pro","Helvetica Neue","HelveticaNeue",Arial,sans-serif!important;font-synthesis:none;letter-spacing:0!important}
-.explore-tab{font-weight:590}.explore-tab.is-selected{font-weight:700}
-.explore-categories .text-node{font-weight:590!important}
+/* These labels are the exact SF Pro outlines at the source design's variable weights. */
+[data-design-letterform]>svg{display:block;overflow:visible;pointer-events:none}
+.text-node[data-design-letterform]>svg{width:100%;height:100%}
+.explore-tab[data-design-letterform]{font-weight:590}
+.figma-node[data-id="153:5247"]::after,.figma-node[data-name="Credits"]::after,.figma-node[data-name="history button"]::after{content:"";position:absolute;inset:0;border:1.15px solid #c5cfd9;border-radius:inherit;pointer-events:none;z-index:3}

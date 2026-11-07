@@ -33,7 +33,7 @@ function buildExplore(host){
   const tabs=div(content,'explore-tabs',18,239,250,33);tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label','案例类型');
   const tabButtons=[];
   ['All','Video','Image'].forEach((text,i)=>{
-    const button=document.createElement('button');button.className='explore-tab';button.textContent=text;
+    const button=document.createElement('button');button.className='explore-tab';button.textContent=text;applyDesignLetterform(button,'tab:'+text);
     button.setAttribute('role','tab');button.onclick=()=>{S.tab=i;updateFeed();};tabs.append(button);tabButtons.push(button);
   });
   const categories=div(content,'explore-categories',0,281,375,34);
