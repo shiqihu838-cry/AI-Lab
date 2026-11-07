@@ -24,3 +24,10 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:non
 .ai-feed-video{position:absolute;left:0;top:44px;width:375px;height:calc(100% - 200px);object-fit:contain;pointer-events:none;background:#000}
 #phone[data-page=aiVideoFeed] .unified-status{filter:invert(1)}
 .embedded-back-clean{mask-image:linear-gradient(to right,transparent,#000 25%,#000 75%,transparent),linear-gradient(to bottom,transparent,#000 25%,#000 75%,transparent);mask-composite:intersect}
+/* Bound thumbnail compositing to its rounded card; stop fractional image edges leaking into the gutter. */
+.toolbox-screen [data-name="Card / Creation tool"]{clip-path:inset(0 round 18px);contain:paint;isolation:isolate}
+.toolbox-screen [data-name="Artwork"]>.paint{clip-path:inset(0);contain:paint}
+.toolbox-screen [data-id="570:6642"]{contain:paint}
+.make-it-yours-preview{overflow:hidden;pointer-events:none;background:#000}
+.make-it-yours-screen .unified-status{filter:invert(1)}
+.make-it-yours-video{position:absolute;left:0;top:37px;width:375px;height:210.9375px;object-fit:contain;pointer-events:none;filter:brightness(.68)}
