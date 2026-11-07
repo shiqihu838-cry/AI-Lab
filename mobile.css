@@ -13,3 +13,11 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:non
 .trends-hero-viewport{overflow:hidden;isolation:isolate}.history-list{overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}.history-list::-webkit-scrollbar{display:none}.history-heading,.history-title,.history-subtitle,.history-time{pointer-events:none}.history-entry{cursor:pointer}.history-back{z-index:2}
 
 .badge-optical-content{transform:translateX(1.5px)}.cta-optical-label>svg{transform:translateX(1.5px)}.mode-layer{background:transparent;isolation:isolate}
+/* Original Before/After artwork, with a draggable reveal of the supplied repaired image. */
+.photo-comparison{overflow:hidden;border-radius:inherit;pointer-events:none}
+.comparison-after{pointer-events:none;will-change:clip-path}
+.comparison-handle{z-index:45;pointer-events:auto;cursor:ew-resize;touch-action:none!important;outline:none}
+.comparison-handle:focus-visible{outline:1px solid #fff;outline-offset:-12px;border-radius:12px}
+/* Supplied AI-video clip under the existing Figma caption, clipped by its original card. */
+.capability-video{position:absolute;inset:0;width:242px;height:250px;object-fit:cover;object-position:center;pointer-events:none;opacity:0;display:block}
+.capability-video[data-ready=true]{opacity:1}
