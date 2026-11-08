@@ -4,6 +4,7 @@ function buildExplore(host){
   for(const id of ['153:5015','153:5016','153:5058','153:5059','558:6066','558:6067'])removeNode(id);
   const scroll=div(host,'explore-scroll',0,44,375,627);
   scroll.setAttribute('aria-label','AI Trends 内容');
+  const openVideoFeed=()=>{S.trendsScroll=scroll.scrollTop;S.aiFeedIndex=0;go('aiVideoFeed');};
   const content=div(scroll,'explore-content',0,0,375,1300);
   const composerNode=node('558:5823');
   for(const child of [...root.children]){
@@ -32,7 +33,7 @@ function buildExplore(host){
     }
   };
   heroViewport.onpointercancel=()=>{start=null;dragged=true;};
-  click(heroViewport,()=>{if(dragged){dragged=false;return;}S.trendsScroll=scroll.scrollTop;S.pickerFrom='videoForm';go('videoForm');},'Try It');
+  click(heroViewport,()=>{if(dragged){dragged=false;return;}openVideoFeed();},'Try It');
 
   const tabs=div(content,'explore-tabs',18,239,250,33);tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label','案例类型');
   const tabButtons=[];
@@ -67,7 +68,7 @@ function buildExplore(host){
     list.forEach((item,i)=>{
       const col=i%2,h=item.rect[3],cell=crop(grid,item.src,[11,192][col],heights[col],172,h,...item.rect,7);
       cell.dataset.caseId=item.id;cell.dataset.caseType=item.type;
-      click(cell,()=>{S.trendsScroll=scroll.scrollTop;go(item.type==='Video'?'case':'imageActions');},item.type==='Video'?'查看 AI 同款视频':'查看 AI 图片案例');
+      click(cell,()=>{if(item.type==='Video')openVideoFeed();else{S.trendsScroll=scroll.scrollTop;go('imageActions');}},item.type==='Video'?'查看 AI 同款视频':'查看 AI 图片案例');
       heights[col]+=h+10;
     });
     const gridHeight=Math.max(...heights);grid.style.height=gridHeight+'px';content.style.height=(322+gridHeight+16)+'px';
