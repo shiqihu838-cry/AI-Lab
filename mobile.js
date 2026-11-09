@@ -24,7 +24,17 @@ function resizeMobilePage(){
     if(viewport){viewport.style.height=Math.max(350,H-111-154)+'px';viewport.style.overflow='hidden';}
     if(carousel){const factor=Math.min(1,Math.max(.68,(620.72+delta-14-carouselY)/276));carousel.style.transformOrigin='187.5px 0';carousel.style.transform=`scale(${factor})`;}
   }else if(['form','uploaded','videoForm'].includes(S.page)){
-    const panel=named('Bottom sheet / Light')[0];if(panel){const top=Math.max(48,H-514),height=H-top;yAt(panel,top);panel.style.height=height+'px';const footer=named('Fixed action area')[0],body=named('Form content')[0];if(footer)yAt(footer,height-100);if(body){body.style.maxHeight=Math.max(100,height-128)+'px';body.style.overflowY='auto';body.style.scrollbarWidth='none';}}
+    const panel=named('Bottom sheet / Light')[0];
+    if(panel){
+      const top=Math.max(48,H-514),height=H-top;
+      yAt(panel,top);
+      panel.style.height=height+'px';
+      const backdrop=host.querySelector('.sheet-dismiss-backdrop');
+      if(backdrop)backdrop.style.height=top+'px';
+      const footer=named('Fixed action area')[0],body=named('Form content')[0];
+      if(footer)yAt(footer,height-100);
+      if(body){body.style.maxHeight=Math.max(100,height-128)+'px';body.style.overflowY='auto';body.style.scrollbarWidth='none';}
+    }
   }else if(S.page==='tools'){
     moveBottomChildren(root,delta);layoutToolbox(host,H);
   }else if(S.page==='explore'){

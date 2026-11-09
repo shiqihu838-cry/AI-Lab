@@ -58,6 +58,12 @@ function applyMakeItYoursStyle(host){
   if(root&&sheet){
     const preview=div(root,'make-it-yours-preview',0,44,375,282),video=aiVideoPlayback('make-it-yours-video');
     preview.append(video);root.insertBefore(preview,sheet);video.play().catch(()=>{});
+    const backdrop=hit(root,0,0,375,0,()=>{
+      // Leave the sheet and its photo picker together when tapping the background.
+      while(['form','videoForm','uploaded','picker'].includes(S.history.at(-1)))S.history.pop();
+      back();
+    },'收起 Make it yours');
+    backdrop.classList.add('sheet-dismiss-backdrop');
   }
   named('Create your own').forEach(e=>{e.style.width='240px';e.textContent='Make it yours';e.setAttribute('aria-label','Make it yours');applyDesignLetterform(e,'form:make-it-yours-heading');});
   named('Upload photo').forEach(e=>{e.style.border='0';e.style.boxShadow='none';});
