@@ -2,7 +2,7 @@
 const F=window.FIGMA,phone=document.querySelector('#phone');
 const ids={home:'153:5127',homeCut:'620:8445',homeVideo:'677:3666',explore:'153:5014',tools:'570:6640',form:'632:1779',uploaded:'663:3156',videoForm:'676:3216',uploading:'677:4099',assistant:'679:5798',mode:'558:5860'};
 const names={home:'AI Lab · 快速修图',homeVideo:'AI Lab · AI 视频',homeCut:'AI Lab · AutoCut',explore:'AI Trends',tools:'AI Toolbox',history:'History',photoPicker:'AutoCut · 选择素材',photoPrompt:'AutoCut · 上传与提示词',videoActions:'AI 视频 · Quick actions',imageActions:'AI 修图 · Quick actions',case:'同款视频',aiVideoFeed:'AI video · 视频流',form:'同款 · 上传前',picker:'选择图片',uploaded:'同款 · 上传后',uploading:'Uploading',assistant:'AI 回复',keyboard:'输入框',mode:'Auto / Video / Image',add:'添加素材',videoForm:'AI 视频 · 上传前'};
-const S={page:'home',history:[],home:'home',previous:'home',photo:null,selected:0,selectedCell:0,pickerFrom:'form',prompt:'',duration:0,quality:0,tab:0,category:1,task:false,editing:false};let timer,swipeBusy=false;
+const S={page:'home',history:[],home:'home',previous:'home',photo:null,selected:0,selectedCell:0,pickerFrom:'form',prompt:'',duration:0,quality:0,tab:0,category:0,task:false,editing:false};let timer,swipeBusy=false;
 const flat=n=>[n,...(n.children??[]).flatMap(flat)];const allNodes=Object.values(F.trees).flatMap(flat);const byId=new Map(allNodes.map(n=>[n.id,n]));
 const color=(c,a=1)=>`rgba(${Math.round(c.r*255)},${Math.round(c.g*255)},${Math.round(c.b*255)},${c.a??a})`;
 function setBox(el,x,y,w,h){Object.assign(el.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});return el;}

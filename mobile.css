@@ -34,6 +34,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:non
 
 .trends-hero-viewport .figma-node,.trends-hero-viewport .paint{backface-visibility:visible}
 .trends-hero-viewport .trends-hero-card{overflow:hidden;border-radius:8px!important;clip-path:inset(0 round 8px);contain:paint}
+.explore-category-new{display:flex;align-items:center;justify-content:center;border-radius:6px;color:#58616a;font-size:11px;font-weight:600;white-space:nowrap}
+.explore-category-new[aria-pressed=true]{color:#11171d}
 .gallery-area{isolation:isolate}
 .picker-footer{z-index:20}
 .picker-tip{z-index:21;background:#333338;border-radius:10px;transition:opacity .2s}

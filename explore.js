@@ -56,9 +56,41 @@ function buildExplore(host){
   });
   const categories=div(content,'explore-categories',0,281,375,34);
   const row=node('559:6092');categories.append(row);row.style.left='11.783203125px';row.style.top='0';
-  const chips=[...row.children].filter(e=>e.dataset.id);
-  const categoryNames=['Following','TikTok','Black Friday','PRO','Lifestyle'];
+  const existingChips=[...row.children].filter(e=>e.dataset.id);
+  const seedance=div(row,'explore-category-new',0,0,119,30);
+  seedance.textContent='Try Seedance 2.5';
+  row.prepend(seedance);
+  const newChipSpace=119+8;
+  for(const chip of existingChips)chip.style.left=(parseFloat(chip.style.left)+newChipSpace)+'px';
+  row.style.width=(parseFloat(row.style.width)+newChipSpace+12)+'px';
+  const chips=[seedance,...existingChips];
+  const categoryNames=['Try Seedance 2.5','Following','TikTok','Black Friday','PRO','Lifestyle'];
   chips.forEach((chip,i)=>click(chip,()=>{S.category=i;updateFeed();},categoryNames[i]));
+
+  // Touch and trackpad use native horizontal scrolling. Mouse users can drag the same strip.
+  let categoryDrag=null,categoryDragged=false;
+  categories.addEventListener('pointerdown',event=>{
+    categoryDragged=false;
+    if(event.pointerType==='mouse'&&event.button===0){
+      categoryDrag={id:event.pointerId,x:event.clientX,scroll:categories.scrollLeft};
+    }
+  });
+  categories.addEventListener('pointermove',event=>{
+    if(categoryDrag?.id!==event.pointerId)return;
+    const dx=event.clientX-categoryDrag.x;
+    if(!categoryDragged&&Math.abs(dx)<5)return;
+    if(!categoryDragged)categories.setPointerCapture(event.pointerId);
+    categoryDragged=true;
+    const scale=categories.getBoundingClientRect().width/categories.clientWidth;
+    categories.scrollLeft=categoryDrag.scroll-dx/scale;
+  });
+  const endCategoryDrag=()=>{categoryDrag=null;};
+  categories.addEventListener('pointerup',endCategoryDrag);
+  categories.addEventListener('pointercancel',endCategoryDrag);
+  categories.addEventListener('pointerleave',()=>{if(!categoryDragged)endCategoryDrag();});
+  categories.addEventListener('click',event=>{
+    if(categoryDragged){event.stopPropagation();categoryDragged=false;}
+  },true);
   const grid=div(content,'explore-grid',0,322,375,1000);
   const gallery=F.hashes['78e5b57c59fe8404b7cd8cdbec675b325263fd34'];
   const cases=[
@@ -72,7 +104,7 @@ function buildExplore(host){
     {id:'i3',type:'Image',src:source('trends-image'),rect:[192,437,172,234]}
   ];
   // Demonstration feeds use only cases supplied by the user, preserving their screenshot crops.
-  const categoryOrder=[['v0','i0','h0','i1','v1','h1','i2','i3'],['h0','h1','v0','v1','i0','i1','i2','i3'],['v0','i1','v1','i0','h1','h0','i3','i2'],['i0','v1','i1','v0','h0','h1','i2','i3'],['i1','i0','v0','v1','h1','h0','i3','i2']];
+  const categoryOrder=[['v0','v1','h0','h1','i0','i1','i2','i3'],['v0','i0','h0','i1','v1','h1','i2','i3'],['h0','h1','v0','v1','i0','i1','i2','i3'],['v0','i1','v1','i0','h1','h0','i3','i2'],['i0','v1','i1','v0','h0','h1','i2','i3'],['i1','i0','v0','v1','h1','h0','i3','i2']];
   function updateFeed(){
     tabButtons.forEach((button,i)=>{button.classList.toggle('is-selected',S.tab===i);button.setAttribute('aria-selected',String(S.tab===i));});
     chips.forEach((chip,i)=>{chip.style.boxShadow=`inset 0 0 0 ${S.category===i?1.2:.8}px ${S.category===i?'#11171d':'#cdd4dc'}`;chip.setAttribute('aria-pressed',String(S.category===i));});
