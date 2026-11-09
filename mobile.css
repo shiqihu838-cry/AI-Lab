@@ -31,6 +31,9 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:non
 .make-it-yours-preview{overflow:hidden;pointer-events:none;background:#000}
 .make-it-yours-screen .unified-status{filter:invert(1)}
 .make-it-yours-video{position:absolute;left:0;top:37px;width:375px;height:210.9375px;object-fit:contain;pointer-events:none;filter:brightness(.68)}
+
+.trends-hero-viewport .figma-node,.trends-hero-viewport .paint{backface-visibility:visible}
+.trends-hero-viewport .trends-hero-card{overflow:hidden;border-radius:8px!important;clip-path:inset(0 round 8px);contain:paint}
 .gallery-area{isolation:isolate}
 .picker-footer{z-index:20}
 .picker-tip{z-index:21;background:#333338;border-radius:10px;transition:opacity .2s}

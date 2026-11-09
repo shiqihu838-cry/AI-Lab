@@ -18,18 +18,31 @@ function buildExplore(host){
   click(exit,()=>{S.history=[];S.trendsScroll=0;go(S.home||'home',false);},'返回 AI Lab');
 
   const hero=node('153:5024');
-  const heroViewport=div(content,'trends-hero-viewport',19,68.5,356,158);
-  heroViewport.dataset.heroIndex='1';
-  heroViewport.append(hero);hero.style.left='-291.216796875px';hero.style.top='0';hero.style.pointerEvents='none';
+  const heroViewport=div(content,'trends-hero-viewport',0,68.5,375,158);
+  const cards=['153:5025','153:5036','153:5040'].map(node);
+  const cardPositions=cards.map(card=>parseFloat(card.style.left));
+  const caption=node('153:5051');
+  // Keep the middle caption within its card's clipping boundary too.
+  caption.style.left=(parseFloat(caption.style.left)-cardPositions[1])+'px';
+  cards[1].append(caption);
+  cards.forEach(card=>card.classList.add('trends-hero-card'));
+  for(const id of ['153:5034','153:5049','153:5056'])removeNode(id);
+  heroViewport.append(hero);hero.style.top='0';hero.style.pointerEvents='none';
   let start=null,dragged=false,heroIndex=1;
+  function positionHero(){
+    const last=cards.length-1;
+    const offset=heroIndex===last?356-parseFloat(hero.style.width):19-cardPositions[heroIndex];
+    hero.style.left=offset+'px';
+    heroViewport.dataset.heroIndex=String(heroIndex);
+  }
+  positionHero();
   heroViewport.style.touchAction='pan-y';
   heroViewport.onpointerdown=e=>{start={x:e.clientX,y:e.clientY};dragged=false;};
   heroViewport.onpointerup=e=>{
     if(!start)return;const dx=e.clientX-start.x,dy=e.clientY-start.y;start=null;
     if(Math.abs(dx)>25&&Math.abs(dx)>Math.abs(dy)){
-      dragged=true;heroIndex=Math.max(0,Math.min(2,heroIndex+(dx<0?1:-1)));
-      heroViewport.dataset.heroIndex=String(heroIndex);
-      hero.style.transition='left .35s ease';hero.style.left=(.079345703125-heroIndex*291.296142578125)+'px';
+      dragged=true;heroIndex=Math.max(0,Math.min(cards.length-1,heroIndex+(dx<0?1:-1)));
+      hero.style.transition='left .35s ease';positionHero();
     }
   };
   heroViewport.onpointercancel=()=>{start=null;dragged=true;};
