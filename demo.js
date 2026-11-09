@@ -142,8 +142,38 @@ function drawPicker(host,photo=false){const key=photo?'photo-edit':'picker';host
  }
 }
 function drawPrompt(host,add=false){const key=add?'add-menu':'photo-prompt';host.style.background='linear-gradient(165deg,#fbfcff,#edf2f8)';status(host,key,add?'23:53':'16:53');const items=add?['Girls\nGenerate...','Little\nSPIDER...','Crying\ninfront of...','Versi\ncowok lu...']:['AutoCut','Trending\nPic','Ai Photo\nTemplate','Little\nPrincess'];const sy=add?238:257,sw=add?74:74;for(let i=0;i<5;i++){const x=(add?18:11)+i*82;const c=crop(host,source(key),x,sy,74,112,x,sy,74,112,12);click(c,()=>go('case'),items[i]||'查看灵感');}
- const box=div(host,'native-panel',15,add?357:375,345,add?132:114);const hint=add?'Up to 50 image, video, and audio references.\nUse only media you have rights and consent\nfor.':'Recommend some templates that match the\nuploaded media.';const field=editable(box,15,17,315,62,S.prompt||(!add?'Recommend some templates that match the uploaded media.':''),add?hint:'Recommend some templates that match the uploaded media.',v=>S.prompt=v);field.style.lineHeight='18px';sourceIcon(box,key,[26,448,31,31],11,add?90:72,31,31);sourceIcon(box,key,[64,448,31,31],49,add?90:72,31,31);sourceIcon(box,key,[281,448,31,31],266,add?90:72,31,31);sourceIcon(box,key,[318,448,31,31],303,add?90:72,31,31);hit(box,9,add?88:70,35,35,()=>picker('photoPrompt'),'添加素材');hit(box,47,add?88:70,35,35,()=>go('mode'),'选择模式');hit(box,300,add?88:70,36,35,()=>{S.task=true;go('uploading');},'发送');
- const drawer=div(host,'',0,500,375,312);drawer.style.background='#fff';drawer.style.borderRadius='16px 16px 0 0';selector(drawer,key,0);['Camera','Photos','Files'].forEach((s,i)=>{const tile=div(drawer,'',i*125,53,123,92);tile.style.background='#f3f3f5';tile.style.borderRadius='7px';sourceIcon(tile,key,[49+i*125,579,23,22],50,25,23,22);label(tile,s,0,50,123,20,12,400,'#60636b').style.textAlign='center';click(tile,()=>picker('photoPrompt'),s);});const grid=pickerGrid(drawer,key,{y:145,height:167,rows:2,startY:645});let start;drawer.onpointerdown=e=>start=e.clientY;drawer.onpointerup=e=>{if(e.clientY-start>45){drawer.style.transition='transform .25s';drawer.style.transform='translateY(260px)';field.focus();}};}
+ const box=div(host,'native-panel',15,add?357:375,345,add?132:114);const hint=add?'Up to 50 image, video, and audio references.\nUse only media you have rights and consent\nfor.':'Recommend some templates that match the\nuploaded media.';const field=editable(box,15,17,315,62,S.prompt||(!add?'Recommend some templates that match the uploaded media.':''),add?hint:'Recommend some templates that match the uploaded media.',v=>S.prompt=v);field.style.lineHeight='18px';sourceIcon(box,key,[26,448,31,31],11,add?90:72,31,31);sourceIcon(box,key,[64,448,31,31],49,add?90:72,31,31);sourceIcon(box,key,[281,448,31,31],266,add?90:72,31,31);sourceIcon(box,key,[318,448,31,31],303,add?90:72,31,31);hit(box,9,add?88:70,35,35,()=>{if(add&&drawer.inert)setDrawerOpen(true);else picker('photoPrompt');},'添加素材');hit(box,47,add?88:70,35,35,()=>go('mode'),'选择模式');hit(box,300,add?88:70,36,35,()=>{S.task=true;go('uploading');},'发送');
+ const drawer=div(host,'material-drawer',0,500,375,312);
+ drawer.style.background='#fff';
+ drawer.style.borderRadius='16px 16px 0 0';
+ drawer.style.transition='transform .25s ease';
+ function setDrawerOpen(open){
+   drawer.inert=!open;
+   drawer.style.transform=open?'':'translateY(100%)';
+ }
+ selector(drawer,key,0);
+ ['Camera','Photos','Files'].forEach((name,i)=>{
+   const tile=div(drawer,'',i*125,53,123,92);
+   tile.style.background='#f3f3f5';
+   tile.style.borderRadius='7px';
+   sourceIcon(tile,key,[49+i*125,579,23,22],50,25,23,22);
+   label(tile,name,0,50,123,20,12,400,'#60636b').style.textAlign='center';
+   click(tile,()=>picker('photoPrompt'),name);
+ });
+ pickerGrid(drawer,key,{y:145,height:167,rows:2,startY:645});
+ if(add)host.addEventListener('click',event=>{
+   if(event.target===host)setDrawerOpen(false);
+ });
+ let start;
+ drawer.onpointerdown=event=>{start=event.clientY;};
+ drawer.onpointerup=event=>{
+   if(event.clientY-start>45){
+     if(add)setDrawerOpen(false);
+     else drawer.style.transform='translateY(260px)';
+     field.focus();
+   }
+ };
+}
 function drawActions(host,image=false){const key=image?'autocut-prompt':'video-prompt';host.style.background='linear-gradient(160deg,#f3f5f8 0%,#edf1f5 60%,#f7faff)';status(host,key,'23:55');const close=sourceIcon(host,key,[17,72,43,43],17,72,43,43);close.style.borderRadius='50%';click(close,back,'关闭');label(host,image?'For images':'For videos',15,157,140,20,13,400,'#929292');label(host,'Quick actions',15,178,240,29,19,700);const labels=image?['Change shot\nangle','Enhance\nquality','Remove\npeople','Retouch','Boost color','Blur\nbackground']:['AI ad maker','Emotional ad','Animate photo','Make a\nproduct ad','Remix a movie','AutoCut'];for(let i=0;i<6;i++){const x=i%2?196:15,y=215+Math.floor(i/2)*67;const tile=div(host,'',x,y,165,52);crop(tile,source(key),0,0,52,52,x,y,52,52,13);label(tile,labels[i],63,14,102,40,13,400);click(tile,()=>{S.pickerFrom='photoPicker';go('photoPicker');},labels[i].replaceAll('\n',' '));}
  label(host,'おすすめ',15,436,110,24,17,600);sourceIcon(host,key,[91,435,17,20],91,435,17,20);const strip=div(host,'',15,473,345,125);strip.style.borderRadius='16px';strip.style.overflow='hidden';for(let i=0;i<5;i++){const x=16+i*68;const c=crop(strip,source(key),i*68,0,68,125,x,474,68,125);click(c,()=>image?picker('imageActions'):go('case'),'打开同款案例');}label(host,image?'厳選テンプレ':'AI トレンド',15,622,180,25,17,600);sourceIcon(host,key,[15,661,345,10],15,661,345,10);composer(host,{mode:image?'Image':'Video',key});}
 function drawCase(host,ai=false){const activeAI=ai&&S.aiFeedIndex!==1,src=source('case');host.style.background='#000';if(activeAI){const video=aiVideoPlayback('ai-feed-video');host.append(video);video.play().catch(()=>{});}else{crop(host,src,0,47,322,620,0,47,322,620);crop(host,src,322,47,53,620,322,47,1,620);const clean= crop(host,src,12,70,28,30,44,70,28,30);clean.classList.add('embedded-back-clean');clean.style.pointerEvents='none';}const backButton=div(host,'feed-back',8,63,40,40);const backGlyph=icon(backButton,'icon/back',10,10,20);backGlyph.style.filter='brightness(0) invert(1)';click(backButton,back,'返回');const avatar=crop(host,src,322,476,44,44,322,476,44,44,22);avatar.classList.add('feed-avatar');const follow=crop(host,src,333,507,22,22,333,507,22,22,11);click(follow,()=>{follow.style.opacity=follow.style.opacity==='0.6'?'1':'0.6';},'关注');
