@@ -31,3 +31,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:non
 .make-it-yours-preview{overflow:hidden;pointer-events:none;background:#000}
 .make-it-yours-screen .unified-status{filter:invert(1)}
 .make-it-yours-video{position:absolute;left:0;top:37px;width:375px;height:210.9375px;object-fit:contain;pointer-events:none;filter:brightness(.68)}
+.gallery-area{isolation:isolate}
+.picker-footer{z-index:20}
+.picker-tip{z-index:21;background:#333338;border-radius:10px;transition:opacity .2s}
+.picker-tip .picker-tip-photo{pointer-events:none}
+.gallery-area .picked-dot{z-index:111;border:1px solid #fff;line-height:16px;pointer-events:none}

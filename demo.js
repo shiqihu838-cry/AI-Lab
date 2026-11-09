@@ -78,12 +78,59 @@ function composer(host,{y=673,mode='Auto',key='video-prompt',value='',placeholde
  if(mode==='Auto'){icon(box,'icon/auto',51,67,16);hit(box,47,60,30,30,()=>go('mode'),'选择模式');}else{const pill=div(box,'',49,60,72,30);pill.style.border='1px solid #e4e9ec';pill.style.borderRadius='16px';sourceIcon(pill,key,[74,738,16,16],10,7,16,16);label(pill,mode,29,7,41,20,12);click(pill,()=>go('mode'),'选择模式');if(mode==='Video'){const model=div(box,'',128,60,107,30);model.style.border='1px solid #e4e9ec';model.style.borderRadius='16px';sourceIcon(model,key,[150,737,17,17],8,7,17,17);label(model,'Seedance 2.5',29,7,77,20,11);click(model,()=>go('videoActions'),'Seedance 2.5');}else{sourceIcon(box,key,[144,732,32,32],128,59,32,32);}}
  sourceIcon(box,key,[280,731,34,34],265,58,34,34);sourceIcon(box,key,[317,731,34,34],302,58,34,34);hit(box,301,57,36,36,()=>{if(S.prompt.trim()){S.task=true;go('uploading');}else go('explore');},'发送');return box;}
 function bindMode(host){for(const e of [...phone.querySelectorAll('.text-node')]){if(e.textContent==='Auto')click(e.parentElement,()=>go(S.home),'Auto');if(e.textContent==='Video')click(e.parentElement,()=>go('videoActions'),'Video');if(e.textContent==='Image')click(e.parentElement,()=>go('imageActions'),'Image');}hit(host,0,0,375,520,back,'关闭模式选择');}
-function selector(host,key,top=58){const head=div(host,'',0,top,375,56);head.style.background='#fff';head.style.borderRadius='16px 16px 0 0';const handle=div(head,'',170,5,34,4);handle.style.background='#f1f1f1';handle.style.borderRadius='2px';label(head,'Select media',15,27,170,22,13,500);label(head,key==='picker'?'Photos':'All',key==='picker'?211:239,27,47,22,13);sourceIcon(head,key,[262,top===0?528:87,12,12],260,29,12,12);label(head,'最近项目',288,27,58,22,13);sourceIcon(head,key,[344,top===0?528:87,12,12],344,29,12,12);let start;head.onpointerdown=e=>start=e.clientY;head.onpointerup=e=>{if(e.clientY-start>30)S.page==='photoPicker'?go('photoPrompt'):back();};}
-function pickerGrid(host,key,{y=114,height=610,rows=5,startY=114}={}){const grid=div(host,'gallery-area',0,y,375,height);const cell=125;for(let i=0;i<rows*3;i++){const col=i%3,row=Math.floor(i/3),x=col*125,sy=startY+row*125;const image=crop(grid,source(key),x,row*125,124,124,x,sy,124,124);click(image,()=>{S.selected=S.selected===i+1?0:i+1;S.selectedCell=i;S.photo=S.selected?{src:source(key),rect:[x,sy,124,124]}:null;render();},'选择第 '+(i+1)+' 张素材');if(S.selected===i+1){const outline=div(image,'picked-outline',0,0,124,124);const dot=div(outline,'picked-dot',99,7,18,18);dot.textContent='1';}}
+function selector(host,key,top=58){
+  const head=div(host,'',0,top,375,56);
+  head.style.background='#fff';
+  head.style.borderRadius='16px 16px 0 0';
+  const handle=div(head,'',170,5,34,4);
+  handle.style.background='#f1f1f1';
+  handle.style.borderRadius='2px';
+  label(head,'Select media',15,27,170,22,13,500);
+  label(head,key==='picker'?'Photos':'All',key==='picker'?211:239,27,47,22,13);
+  const chevron=[347,86,12,12];
+  sourceIcon(head,'photo-edit',chevron,259,29,12,12);
+  label(head,'最近项目',288,27,58,22,13);
+  sourceIcon(head,'photo-edit',chevron,346,29,12,12).classList.add('picker-recents-chevron');
+  let start;
+  head.onpointerdown=e=>start=e.clientY;
+  head.onpointerup=e=>{if(e.clientY-start>30)S.page==='photoPicker'?go('photoPrompt'):back();};
+}
+function pickerGrid(host,key,{y=114,height=610,rows=5,startY=114}={}){
+ const grid=div(host,'gallery-area',0,y,375,height);
+ for(let i=0;i<rows*3;i++){
+   const col=i%3,row=Math.floor(i/3),x=col*125;
+   // The original picker screenshot has a hint baked into the lower rows.
+   const sourceRow=key==='picker'?row%3:row;
+   const rect=[x,startY+sourceRow*125,124,124];
+   const image=crop(grid,source(key),x,row*125,124,124,...rect);
+   click(image,()=>{
+     S.selected=S.selected===i+1?0:i+1;
+     S.selectedCell=i;
+     S.photo=S.selected?{src:source(key),rect}:null;
+     render();
+   },'选择第 '+(i+1)+' 张素材');
+   if(S.selected===i+1){
+     div(image,'picked-outline',0,0,124,124);
+     const dot=div(image,'picked-dot',100,4.5,18,18);
+     dot.textContent='1';
+   }
+ }
  const full=div(grid,'',0,rows*125-1,1,1);full.style.pointerEvents='none';return grid;}
-function drawPicker(host,photo=false){const key=photo?'photo-edit':'picker';host.style.background='#fff';status(host,key,photo?'16:53':'22:35');selector(host,key);pickerGrid(host,key,{height:photo?610:535,rows:5});const footer=div(host,'',0,photo?724:649,375,photo?88:163);footer.style.background='#fff';
+function drawPicker(host,photo=false){const key=photo?'photo-edit':'picker';host.style.background='#fff';status(host,key,photo?'16:53':'22:35');selector(host,key);pickerGrid(host,key,{height:photo?610:535,rows:5});const footer=div(host,'picker-footer',0,photo?724:649,375,photo?88:163);footer.style.background='#fff';
  if(!photo){const selected=div(footer,'',11,12,63,63);selected.style.border='2px solid #1c2025';selected.style.borderRadius='10px';selected.style.background='#eef0f2';if(S.selected&&S.photo)crop(selected,S.photo.src,2,2,55,55,...S.photo.rect,7);label(footer,'Follow the tips above for optimal results',15,98,249,20,11,400,'#444');}
- const next=div(footer,'',275,photo?14:89,83,33);next.style.background=S.selected?'#55dce2':'#abe8ee';next.style.borderRadius='7px';const t=label(next,'Next',0,8,83,18,12,500,'white');t.style.textAlign='center';click(next,()=>{if(!S.selected)return;if(photo)go('photoPrompt');else go('uploaded');},'Next');if(!photo){const tip=div(host,'',15,578,345,59);tip.style.background='#454545ed';tip.style.borderRadius='8px';label(tip,'Upload a photo to restyle like this',10,22,325,20,12,400,'white').style.textAlign='center';setTimeout(()=>{tip.style.transition='opacity .2s';tip.style.opacity=0;tip.style.pointerEvents='none';},2400);}}
+ const next=div(footer,'',275,photo?14:89,83,33);next.style.background=S.selected?'#55dce2':'#abe8ee';next.style.borderRadius='7px';const t=label(next,'Next',0,8,83,18,12,500,'white');t.style.textAlign='center';click(next,()=>{if(!S.selected)return;if(photo)go('photoPrompt');else go('uploaded');},'Next');
+ if(!photo){
+   const tip=div(host,'picker-tip',15,578,345,59);
+   crop(tip,source('case'),11,11,37,37,49,132,266,266,5).classList.add('picker-tip-photo');
+   label(tip,'Upload a photo to restyle like this',58,20,253,20,12,400,'white');
+   const close=div(tip,'',313,4,28,28);
+   const glyph=icon(close,'AI tool icon / close',8,8,12);
+   glyph.style.filter='brightness(0) invert(1)';
+   glyph.style.opacity='.7';
+   click(close,()=>tip.remove(),'关闭提示');
+   setTimeout(()=>{tip.style.opacity=0;tip.style.visibility='hidden';},2400);
+ }
+}
 function drawPrompt(host,add=false){const key=add?'add-menu':'photo-prompt';host.style.background='linear-gradient(165deg,#fbfcff,#edf2f8)';status(host,key,add?'23:53':'16:53');const items=add?['Girls\nGenerate...','Little\nSPIDER...','Crying\ninfront of...','Versi\ncowok lu...']:['AutoCut','Trending\nPic','Ai Photo\nTemplate','Little\nPrincess'];const sy=add?238:257,sw=add?74:74;for(let i=0;i<5;i++){const x=(add?18:11)+i*82;const c=crop(host,source(key),x,sy,74,112,x,sy,74,112,12);click(c,()=>go('case'),items[i]||'查看灵感');}
  const box=div(host,'native-panel',15,add?357:375,345,add?132:114);const hint=add?'Up to 50 image, video, and audio references.\nUse only media you have rights and consent\nfor.':'Recommend some templates that match the\nuploaded media.';const field=editable(box,15,17,315,62,S.prompt||(!add?'Recommend some templates that match the uploaded media.':''),add?hint:'Recommend some templates that match the uploaded media.',v=>S.prompt=v);field.style.lineHeight='18px';sourceIcon(box,key,[26,448,31,31],11,add?90:72,31,31);sourceIcon(box,key,[64,448,31,31],49,add?90:72,31,31);sourceIcon(box,key,[281,448,31,31],266,add?90:72,31,31);sourceIcon(box,key,[318,448,31,31],303,add?90:72,31,31);hit(box,9,add?88:70,35,35,()=>picker('photoPrompt'),'添加素材');hit(box,47,add?88:70,35,35,()=>go('mode'),'选择模式');hit(box,300,add?88:70,36,35,()=>{S.task=true;go('uploading');},'发送');
  const drawer=div(host,'',0,500,375,312);drawer.style.background='#fff';drawer.style.borderRadius='16px 16px 0 0';selector(drawer,key,0);['Camera','Photos','Files'].forEach((s,i)=>{const tile=div(drawer,'',i*125,53,123,92);tile.style.background='#f3f3f5';tile.style.borderRadius='7px';sourceIcon(tile,key,[49+i*125,579,23,22],50,25,23,22);label(tile,s,0,50,123,20,12,400,'#60636b').style.textAlign='center';click(tile,()=>picker('photoPrompt'),s);});const grid=pickerGrid(drawer,key,{y:145,height:167,rows:2,startY:645});let start;drawer.onpointerdown=e=>start=e.clientY;drawer.onpointerup=e=>{if(e.clientY-start>45){drawer.style.transition='transform .25s';drawer.style.transform='translateY(260px)';field.focus();}};}

@@ -35,8 +35,12 @@ function resizeMobilePage(){
   }else if(S.page==='history'){
     const list=host.querySelector('.history-list');if(list)list.style.height=Math.max(140,H-106)+'px';
   }else if(['photoPicker','picker'].includes(S.page)){
-    const footerY=H-(S.page==='picker'?163:88);for(const e of host.children){const b=geometry(e);if(b.y>=(S.page==='picker'?649:724))yAt(e,b.y+delta);if(b.y===578)yAt(e,b.y+delta);}
-    const gallery=host.querySelector('.gallery-area');if(gallery)gallery.style.height=Math.max(130,footerY-114)+'px';
+    const footer=host.querySelector('.picker-footer');
+    const footerY=H-geometry(footer).h;
+    yAt(footer,footerY);
+    const tip=host.querySelector('.picker-tip');
+    if(tip)yAt(tip,footerY-geometry(tip).h-12);
+    const gallery=host.querySelector('.gallery-area');if(gallery)gallery.style.height=Math.max(0,footerY-114)+'px';
   }else if(['photoPrompt','add','keyboard'].includes(S.page)){moveBottomChildren(host,delta,200);
   }else if(['case','aiVideoFeed'].includes(S.page)){moveBottomChildren(host,delta,476);
   }else if(['uploading','assistant'].includes(S.page)){if(root)moveBottomChildren(root,delta);moveBottomChildren(host,delta);}
