@@ -162,7 +162,9 @@ function drawPrompt(host,add=false){const key=add?'add-menu':'photo-prompt';host
  });
  pickerGrid(drawer,key,{y:145,height:167,rows:2,startY:645});
  if(add)host.addEventListener('click',event=>{
-   if(event.target===host)setDrawerOpen(false);
+   if(event.target!==host)return;
+   S.history=[];
+   go('home',false);
  });
  let start;
  drawer.onpointerdown=event=>{start=event.clientY;};
