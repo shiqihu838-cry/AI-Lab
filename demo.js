@@ -103,10 +103,14 @@ function pickerGrid(host,key,{y=114,height=610,rows=5,startY=114}={}){
    const sourceRow=key==='picker'?row%3:row;
    const rect=[x,startY+sourceRow*125,124,124];
    const image=crop(grid,source(key),x,row*125,124,124,...rect);
+   // Preview the sample artwork without the gallery controls baked into its tile.
+   const photo=key==='picker'&&sourceRow===0&&col===0
+     ?{src:source('case'),rect:[14,144,300,300]}
+     :{src:source(key),rect:key==='picker'?[rect[0]+24,rect[1]+24,96,96]:rect};
    click(image,()=>{
      S.selected=S.selected===i+1?0:i+1;
      S.selectedCell=i;
-     S.photo=S.selected?{src:source(key),rect}:null;
+     S.photo=S.selected?photo:null;
      render();
    },'选择第 '+(i+1)+' 张素材');
    if(S.selected===i+1){
